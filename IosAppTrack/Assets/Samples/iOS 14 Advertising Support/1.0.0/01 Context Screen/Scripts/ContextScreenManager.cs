@@ -31,14 +31,17 @@ namespace Unity.Advertisement.IosSupport.Samples
                 contextScreen.sentTrackingAuthorizationRequest += () => Destroy(contextScreen.gameObject);
             }
 
-            StartCoroutine(PermissionAsync());
-#else
             Debug.Log("Unity iOS Support: App Tracking Transparency status not checked, because the platform is not iOS.");
+#else
+            
+            
+            StartCoroutine(PermissionAsync());
 #endif
         }
 
         IEnumerator PermissionAsync()
         {
+#if UNITY_IOS && !UNITY_EDITOR
             var status = ATTrackingStatusBinding.GetAuthorizationTrackingStatus();
 
             while (status == ATTrackingStatusBinding.AuthorizationTrackingStatus.NOT_DETERMINED)
@@ -46,8 +49,11 @@ namespace Unity.Advertisement.IosSupport.Samples
                 status = ATTrackingStatusBinding.AuthorizationTrackingStatus.NOT_DETERMINED;
                 yield return null;
             }
-            
+#endif
+            yield return null;
             //TODO do some Job
+            //GameManager
+            //BackendManager
         }
     }   
 }
